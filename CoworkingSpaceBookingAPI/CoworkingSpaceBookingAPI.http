@@ -1,6 +1,41 @@
-@CoworkingSpaceBookingAPI_HostAddress = http://localhost:5120
+@rootURL = http://localhost:5120
 
-GET {{CoworkingSpaceBookingAPI_HostAddress}}/weatherforecast/
+GET {{rootURL}}/api/users/
 Accept: application/json
 
 ###
+
+GET {{rootURL}}/api/users/1
+Accept: application/json
+
+###
+
+POST {{rootURL}}/api/users/
+Content-Type: application/json
+{
+    "id": 0,
+    "name": "newemail@example.com",
+    "email": "New User",
+    "role":{
+        "id": 1,
+        "role": "User"
+    }
+}
+
+###
+
+PUT {{rootURL}}/api/users/1
+Content-Type: application/json
+{
+    "id": 1,
+    "name": "updateemail@example.com",
+    "email": "Updated User",
+    "role":{
+        "id": 1,
+        "role": "User"
+    }
+}
+
+###
+
+DELETE {{rootURL}}/api/users/1
