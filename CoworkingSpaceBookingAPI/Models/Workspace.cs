@@ -13,7 +13,7 @@ namespace CoworkingSpaceBookingAPI.Models
         public int RoomId { get; set; }
         [ForeignKey("WorkspaceTypeId")]
         public int WorkspaceTypeId { get; set; }
-        public WorkspaceType WorkspaceType { get; set; }
-        public Room Room { get; set; }
+        public WorkspaceType? WorkspaceType { get; set; }
+        public Room? Room { get; set; }
     }
 }

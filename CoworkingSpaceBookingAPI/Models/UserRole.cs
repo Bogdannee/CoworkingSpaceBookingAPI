@@ -7,6 +7,6 @@ namespace CoworkingSpaceBookingAPI.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Role { get; set; }
+        public required string Role { get; set; }
     }
 }

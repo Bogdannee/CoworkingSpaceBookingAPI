@@ -7,13 +7,13 @@ namespace CoworkingSpaceBookingAPI.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash {  get; set; }
+        public required string Name { get; set; }
+        public required string Email { get; set; }
+        public required string PasswordHash {  get; set; }
         [ForeignKey("UserRoleId")]
-        public int UserRoleId { get; set; }
+        public required int UserRoleId { get; set; }
 
-        public UserRole Role { get; set; }
+        public UserRole? Role { get; set; }
         public List<Booking> Bookings { get; set; } = new();
     }
 }

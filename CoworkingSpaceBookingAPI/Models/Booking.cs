@@ -15,7 +15,7 @@ namespace CoworkingSpaceBookingAPI.Models
         public DateTime ReservationStartTime { get; set; }
         public int ReservationDurationMinutes { get; set; }
 
-        public User User { get; set; }
-        public Workspace Workspace { get; set; }
+        public User? User { get; set; }
+        public Workspace? Workspace { get; set; }
     }
 }
