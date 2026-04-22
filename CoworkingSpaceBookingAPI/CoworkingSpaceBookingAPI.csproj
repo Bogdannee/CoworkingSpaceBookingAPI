@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\DTO\" />
+    <Folder Include="Domain\DTOs\" />
     <Folder Include="Services\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
