@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CoworkingSpaceBookingAPI.Models
-
+namespace CoworkingSpaceBookingAPI.Domain.Entities
 {
-    public class WorkspaceType
+    public class UserRole
     {
         [Key]
         public int Id { get; set; }
-        public required string Type { get; set; }
+        public required string Role { get; set; }
     }
 }
