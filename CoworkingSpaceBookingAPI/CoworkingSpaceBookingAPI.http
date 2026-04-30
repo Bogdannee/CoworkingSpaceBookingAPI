@@ -1,16 +1,16 @@
 @rootURL = http://localhost:5120
 
-GET {{rootURL}}/api/users/
+GET {{rootURL}}/api/user/
 Accept: application/json
 
 ###
 
-GET {{rootURL}}/api/users/1
+GET {{rootURL}}/api/user/1
 Accept: application/json
 
 ###
 
-POST {{rootURL}}/api/users/
+POST {{rootURL}}/api/user/
 Content-Type: application/json
 {
     "id": 0,
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ###
 
-PUT {{rootURL}}/api/users/1
+PUT {{rootURL}}/api/user/1
 Content-Type: application/json
 {
     "id": 1,
@@ -38,4 +38,4 @@ Content-Type: application/json
 
 ###
 
-DELETE {{rootURL}}/api/users/1
+DELETE {{rootURL}}/api/user/1
