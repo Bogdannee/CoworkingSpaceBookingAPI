@@ -1,8 +1,8 @@
 ﻿using CoworkingSpaceBookingAPI.Domain.Entities;
 
-namespace CoworkingSpaceBookingAPI.Repositories.Interfaces
+namespace CoworkingSpaceBookingAPI.Services.Interfaces
 {
-    public interface IWorkspaceTypeRepository
+    public interface IWorkspaceTypeService
     {
         Task<WorkspaceType?> GetByIdAsync(int id);
         Task<IEnumerable<WorkspaceType>> GetAllAsync();

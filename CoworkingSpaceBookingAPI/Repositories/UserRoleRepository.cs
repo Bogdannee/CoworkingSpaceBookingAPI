@@ -17,11 +17,13 @@ namespace CoworkingSpaceBookingAPI.Repositories
         public async Task AddAsync(UserRole entity)
         {
             await dbSet.AddAsync(entity);
+            await applicationDbContext.SaveChangesAsync();
         }
 
         public void Delete(UserRole entity)
         {
             dbSet.Remove(entity);
+            applicationDbContext.SaveChanges();
         }
 
         public async Task<IEnumerable<UserRole>> GetAllAsync()
@@ -37,11 +39,7 @@ namespace CoworkingSpaceBookingAPI.Repositories
         public void Update(UserRole entity)
         {
             dbSet.Update(entity);
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await applicationDbContext.SaveChangesAsync();
+            applicationDbContext.SaveChanges();
         }
     }
 }
