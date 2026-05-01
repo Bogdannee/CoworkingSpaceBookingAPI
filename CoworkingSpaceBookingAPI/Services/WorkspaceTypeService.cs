@@ -1,9 +1,10 @@
 ﻿using CoworkingSpaceBookingAPI.Domain.Entities;
 using CoworkingSpaceBookingAPI.Repositories.Interfaces;
+using CoworkingSpaceBookingAPI.Services.Interfaces;
 
 namespace CoworkingSpaceBookingAPI.Services
 {
-    public class WorkspaceTypeService
+    public class WorkspaceTypeService : IWorkspaceTypeService
     {
         private readonly IWorkspaceTypeRepository _workspaceTypeRepository;
 
@@ -12,14 +13,16 @@ namespace CoworkingSpaceBookingAPI.Services
             _workspaceTypeRepository = workspaceTypeRepository;
         }
 
-        public async Task AddAsync(WorkspaceType entity)
+        public async Task<WorkspaceType> AddAsync(WorkspaceType entity)
         {
-            await _workspaceTypeRepository.AddAsync(entity);
+            var returnedEntity = await _workspaceTypeRepository.AddAsync(entity);
+
+            return returnedEntity;
         }
 
-        public void Delete(WorkspaceType entity)
+        public async Task DeleteAsync(int id)
         {
-            _workspaceTypeRepository.Delete(entity);
+            await _workspaceTypeRepository.DeleteAsync(id);
         }
 
         public async Task<IEnumerable<WorkspaceType>> GetAllAsync()
@@ -32,9 +35,9 @@ namespace CoworkingSpaceBookingAPI.Services
             return await _workspaceTypeRepository.GetByIdAsync(id);
         }
 
-        public void Update(WorkspaceType entity)
+        public async Task UpdateAsync(int id, WorkspaceType entity)
         {
-            _workspaceTypeRepository.Update(entity);
+            await _workspaceTypeRepository.UpdateAsync(id, entity);
         }
     }
 }

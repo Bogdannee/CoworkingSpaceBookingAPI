@@ -6,8 +6,8 @@ namespace CoworkingSpaceBookingAPI.Repositories.Interfaces
     {
         Task<Workspace?> GetByIdAsync(int id);
         Task<IEnumerable<Workspace>> GetAllAsync();
-        Task AddAsync(Workspace entity);
-        void Update(Workspace entity);
-        void Delete(Workspace entity);
+        Task<Workspace> AddAsync(Workspace entity);
+        Task UpdateAsync(int id, Workspace entity);
+        Task DeleteAsync(int id);
     }
 }

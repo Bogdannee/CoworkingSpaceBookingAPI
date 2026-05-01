@@ -14,16 +14,20 @@ namespace CoworkingSpaceBookingAPI.Repositories
             dbSet = applicationDbContext.Set<User>();
         }
 
-        public async Task AddAsync(User entity)
+        public async Task<User> AddAsync(User entity)
         {
-            await dbSet.AddAsync(entity);
+            dbSet.Add(entity);
             await applicationDbContext.SaveChangesAsync();
+
+            return entity;
         }
 
-        public void Delete(User entity)
+        public async Task DeleteAsync(int id)
         {
+            var entity = await GetByIdAsync(id);
+
             dbSet.Remove(entity);
-            applicationDbContext.SaveChanges();
+            await applicationDbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -36,10 +40,16 @@ namespace CoworkingSpaceBookingAPI.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public void Update(User entity)
+        public async Task UpdateAsync(int id, User entity)
         {
-            dbSet.Update(entity);
-            applicationDbContext.SaveChanges();
+            var request = await GetByIdAsync(id);
+
+            request.Name = entity.Name;
+            request.Email = entity.Email;
+            request.PasswordHash = entity.PasswordHash;
+            request.UserRoleId = entity.UserRoleId;
+
+            await applicationDbContext.SaveChangesAsync();
         }
     }
 }
