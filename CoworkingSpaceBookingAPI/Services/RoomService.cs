@@ -35,7 +35,7 @@ namespace CoworkingSpaceBookingAPI.Services
             return await _roomRepository.GetByIdAsync(id);
         }
 
-        public async Task Update(Room entity)
+        public async Task UpdateAsync(Room entity)
         {
             await _roomRepository.UpdateAsync(entity);
         }

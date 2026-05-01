@@ -38,7 +38,7 @@ namespace CoworkingSpaceBookingAPI.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public async Task Update(Room entity)
+        public async Task UpdateAsync(Room entity)
         {
             dbSet.Update(entity);
             await applicationDbContext.SaveChangesAsync();
