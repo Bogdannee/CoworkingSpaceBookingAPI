@@ -17,7 +17,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
             _userRoleService = userRoleService;
         }
 
-        // GET: api/<UserController>
+        // GET: api/<UserRoleController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserRole>>> GetAll()
         {
@@ -26,7 +26,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return users.ToList();
         }
 
-        // GET api/<UserController>/5
+        // GET api/<UserRoleController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserRole>> GetById(int id)
         {
@@ -35,7 +35,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return user;
         }
 
-        // POST api/<UserController>
+        // POST api/<UserRoleController>
         [HttpPost]
         public async Task<ActionResult<UserRole>> Create(UserRole userRole)
         {
@@ -44,20 +44,20 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return createdUser;
         }
 
-        // PUT api/<UserController>/5
+        // PUT api/<UserRoleController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(UserRole userRole)
+        public async Task<IActionResult> Update(int id, UserRole userRole)
         {
-            await _userRoleService.UpdateAsync(userRole);
+            await _userRoleService.UpdateAsync(id, userRole);
 
             return NoContent();
         }
 
-        // DELETE api/<UserController>/5
+        // DELETE api/<UserRoleController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(UserRole userRole)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _userRoleService.DeleteAsync(userRole);
+            await _userRoleService.DeleteAsync(id);
 
             return NoContent();
         }

@@ -1,5 +1,7 @@
 @rootURL = http://localhost:5120
 
+### --- USER CONTROLLER --- ###
+
 GET {{rootURL}}/api/user/
 Accept: application/json
 
@@ -39,3 +41,35 @@ Content-Type: application/json
 ###
 
 DELETE {{rootURL}}/api/user/1
+
+### --- USER ROLE CONTROLLER --- ###
+
+GET {{rootURL}}/api/userrole/
+Accept: application/json
+
+###
+
+GET {{rootURL}}/api/userrole/1
+Accept: application/json
+
+###
+
+POST {{rootURL}}/api/userrole/
+Content-Type: application/json
+{
+    "id": 0,
+    "role": "Admin"
+}
+
+###
+
+PUT {{rootURL}}/api/userrole/1
+Content-Type: application/json
+{
+    "id": 1,
+    "role": "Admin"
+}
+
+###
+
+DELETE {{rootURL}}/api/userrole/4

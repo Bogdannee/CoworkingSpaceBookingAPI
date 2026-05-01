@@ -20,9 +20,9 @@ namespace CoworkingSpaceBookingAPI.Services
             return returnedEntity;
         }
 
-        public async Task DeleteAsync(Booking entity)
+        public async Task DeleteAsync(int id)
         {
-            await _bookingRepository.DeleteAsync(entity);
+            await _bookingRepository.DeleteAsync(id);
         }
 
         public async Task<IEnumerable<Booking>> GetAllAsync()
@@ -35,9 +35,9 @@ namespace CoworkingSpaceBookingAPI.Services
             return await _bookingRepository.GetByIdAsync(id);
         }
 
-        public async Task UpdateAsync(Booking entity)
+        public async Task UpdateAsync(int id, Booking entity)
         {
-            await _bookingRepository.UpdateAsync(entity);
+            await _bookingRepository.UpdateAsync(id, entity);
         }
     }
 }

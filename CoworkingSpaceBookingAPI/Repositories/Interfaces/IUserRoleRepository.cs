@@ -7,7 +7,7 @@ namespace CoworkingSpaceBookingAPI.Repositories.Interfaces
         Task<UserRole?> GetByIdAsync(int id);
         Task<IEnumerable<UserRole>> GetAllAsync();
         Task<UserRole> AddAsync(UserRole entity);
-        Task UpdateAsync(UserRole entity);
-        Task DeleteAsync(UserRole entity);
+        Task UpdateAsync(int id, UserRole entity);
+        Task DeleteAsync(int id);
     }
 }

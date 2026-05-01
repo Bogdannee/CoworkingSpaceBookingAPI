@@ -46,18 +46,18 @@ namespace CoworkingSpaceBookingAPI.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(User user)
+        public async Task<IActionResult> Update(int id, User user)
         {
-            await _userService.UpdateAsync(user);
+            await _userService.UpdateAsync(id, user);
 
             return NoContent();
         }
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(User user)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _userService.DeleteAsync(user);
+            await _userService.DeleteAsync(id);
 
             return NoContent();
         }

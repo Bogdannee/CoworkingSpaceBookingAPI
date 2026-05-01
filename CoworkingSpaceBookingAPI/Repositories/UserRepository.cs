@@ -22,8 +22,10 @@ namespace CoworkingSpaceBookingAPI.Repositories
             return entity;
         }
 
-        public async Task DeleteAsync(User entity)
+        public async Task DeleteAsync(int id)
         {
+            var entity = await GetByIdAsync(id);
+
             dbSet.Remove(entity);
             await applicationDbContext.SaveChangesAsync();
         }
@@ -38,9 +40,15 @@ namespace CoworkingSpaceBookingAPI.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public async Task UpdateAsync(User entity)
+        public async Task UpdateAsync(int id, User entity)
         {
-            dbSet.Update(entity);
+            var request = await GetByIdAsync(id);
+
+            request.Name = entity.Name;
+            request.Email = entity.Email;
+            request.PasswordHash = entity.PasswordHash;
+            request.UserRoleId = entity.UserRoleId;
+
             await applicationDbContext.SaveChangesAsync();
         }
     }
