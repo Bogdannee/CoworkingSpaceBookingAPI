@@ -14,16 +14,18 @@ namespace CoworkingSpaceBookingAPI.Repositories
             dbSet = applicationDbContext.Set<Booking>();
         }
 
-        public async Task AddAsync(Booking entity)
+        public async Task<Booking> AddAsync(Booking entity)
         {
-            await dbSet.AddAsync(entity);
+            dbSet.Add(entity);
             await applicationDbContext.SaveChangesAsync();
+
+            return entity;
         }
 
-        public void Delete(Booking entity)
+        public async Task DeleteAsync(Booking entity)
         {
             dbSet.Remove(entity);
-            applicationDbContext.SaveChanges();
+            await applicationDbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Booking>> GetAllAsync()
@@ -36,10 +38,10 @@ namespace CoworkingSpaceBookingAPI.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public void Update(Booking entity)
+        public async Task UpdateAsync(Booking entity)
         {
             dbSet.Update(entity);
-            applicationDbContext.SaveChanges();
+            await applicationDbContext.SaveChangesAsync();
         }
     }
 }

@@ -13,14 +13,16 @@ namespace CoworkingSpaceBookingAPI.Services
             _userRepository = userRepository;
         }
 
-        public async Task AddAsync(User entity)
+        public async Task<User> AddAsync(User entity)
         {
-            await _userRepository.AddAsync(entity);
+            var returnedEntity =  await _userRepository.AddAsync(entity);
+
+            return returnedEntity;
         }
 
-        public void Delete(User entity)
+        public async Task DeleteAsync(User entity)
         {
-            _userRepository.Delete(entity);
+            await _userRepository.DeleteAsync(entity);
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -33,9 +35,9 @@ namespace CoworkingSpaceBookingAPI.Services
             return await _userRepository.GetByIdAsync(id);
         }
 
-        public void Update(User entity)
+        public async Task UpdateAsync(User entity)
         {
-            _userRepository.Update(entity);
+            await _userRepository.UpdateAsync(entity);
         }
     }
 }
