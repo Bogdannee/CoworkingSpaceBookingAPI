@@ -16,12 +16,10 @@ POST {{rootURL}}/api/user/
 Content-Type: application/json
 {
     "id": 0,
-    "name": "newemail@example.com",
-    "email": "New User",
-    "role":{
-        "id": 1,
-        "role": "User"
-    }
+    "name": "Bodya",
+    "email": "bodya@mail.com",
+    "passwordHash": "123",
+    "userRoleId": 1
 }
 
 ###
@@ -30,12 +28,10 @@ PUT {{rootURL}}/api/user/1
 Content-Type: application/json
 {
     "id": 1,
-    "name": "updateemail@example.com",
-    "email": "Updated User",
-    "role":{
-        "id": 1,
-        "role": "User"
-    }
+    "name": "Bodya",
+    "email": "bodya@mail.com",
+    "passwordHash": "1234",
+    "userRoleId": 1
 }
 
 ###
@@ -73,3 +69,145 @@ Content-Type: application/json
 ###
 
 DELETE {{rootURL}}/api/userrole/4
+
+### --- WORKSPACE TYPE CONTROLLER --- ###
+
+GET {{rootURL}}/api/workspacetype/
+Accept: application/json
+
+###
+
+GET {{rootURL}}/api/workspacetype/1
+Accept: application/json
+
+###
+
+POST {{rootURL}}/api/workspacetype/
+Content-Type: application/json
+{
+    "id": 0,
+    "type": "Sofa"
+}
+
+###
+
+PUT {{rootURL}}/api/workspacetype/2
+Content-Type: application/json
+{
+    "id": 2,
+    "type": "SuperSofa"
+}
+
+###
+
+DELETE {{rootURL}}/api/workspacetype/3
+
+### --- ROOM CONTROLLER --- ###
+
+GET {{rootURL}}/api/room/
+Accept: application/json
+
+###
+
+GET {{rootURL}}/api/room/1
+Accept: application/json
+
+###
+
+POST {{rootURL}}/api/room/
+Content-Type: application/json
+{
+    "id": 0,
+    "name": "TestRoom1",
+    "floor": 1
+}
+
+###
+
+PUT {{rootURL}}/api/room/1
+Content-Type: application/json
+{
+    "id": 1,
+    "name": "TestRoom",
+    "floor": 2
+}
+
+###
+
+DELETE {{rootURL}}/api/room/2
+
+### --- WORKSPACE CONTROLLER --- ###
+
+GET {{rootURL}}/api/workspace/
+Accept: application/json
+
+###
+
+GET {{rootURL}}/api/workspace/1
+Accept: application/json
+
+###
+
+POST {{rootURL}}/api/workspace/
+Content-Type: application/json
+{
+    "id": 0,
+    "hasSocket": true,
+    "price": 110,
+    "roomId": 1,
+    "workspaceTypeId": 1
+}
+
+###
+
+PUT {{rootURL}}/api/workspace/1
+Content-Type: application/json
+{
+    "id": 0,
+    "hasSocket": false,
+    "price": 100,
+    "roomId": 1,
+    "workspaceTypeId": 1
+}
+
+###
+
+DELETE {{rootURL}}/api/workspace/2
+
+### --- BOOKING CONTROLLER --- ###
+
+GET {{rootURL}}/api/booking/
+Accept: application/json
+
+###
+
+GET {{rootURL}}/api/booking/1
+Accept: application/json
+
+###
+
+POST {{rootURL}}/api/booking/
+Content-Type: application/json
+{
+    "id": 0,
+    "userId": 1,
+    "workspaceId": 1,
+    "reservationStartTime": "2026-05-01T12:41:27.811Z",
+    "reservationDurationMinutes": 10
+}
+
+###
+
+PUT {{rootURL}}/api/booking/1
+Content-Type: application/json
+{
+    "id": 1,
+    "userId": 1,
+    "workspaceId": 1,
+    "reservationStartTime": "2026-05-01T12:41:27.811Z",
+    "reservationDurationMinutes": 30
+}
+
+###
+
+DELETE {{rootURL}}/api/booking/2

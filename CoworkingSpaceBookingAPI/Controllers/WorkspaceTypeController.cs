@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoworkingSpaceBookingAPI.Domain.Entities;
+using CoworkingSpaceBookingAPI.Services;
+using CoworkingSpaceBookingAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,56 @@ namespace CoworkingSpaceBookingAPI.Controllers
     [ApiController]
     public class WorkspaceTypeController : ControllerBase
     {
-        // GET: api/<WorkspaceTypeController>
+        readonly IWorkspaceTypeService _workspaceTypeService;
+
+        public WorkspaceTypeController(IWorkspaceTypeService workspaceTypeService)
+        {
+            _workspaceTypeService = workspaceTypeService;
+        }
+
+        // GET: api/<UserController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<WorkspaceType>>> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            var workspaceTypes = await _workspaceTypeService.GetAllAsync();
+
+            return workspaceTypes.ToList();
         }
 
-        // GET api/<WorkspaceTypeController>/5
+        // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<WorkspaceType>> GetById(int id)
         {
-            return "value";
+            var workspaceType = await _workspaceTypeService.GetByIdAsync(id);
+
+            return workspaceType;
         }
 
-        // POST api/<WorkspaceTypeController>
+        // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<WorkspaceType>> Create(WorkspaceType workspaceType)
         {
+            var createdWorkspaceType = await _workspaceTypeService.AddAsync(workspaceType);
+
+            return createdWorkspaceType;
         }
 
-        // PUT api/<WorkspaceTypeController>/5
+        // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Update(int id, WorkspaceType workspaceType)
         {
+            await _workspaceTypeService.UpdateAsync(id, workspaceType);
+
+            return NoContent();
         }
 
-        // DELETE api/<WorkspaceTypeController>/5
+        // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _workspaceTypeService.DeleteAsync(id);
+
+            return NoContent();
         }
     }
 }
