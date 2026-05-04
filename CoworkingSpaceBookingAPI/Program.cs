@@ -1,5 +1,6 @@
 using CoworkingSpaceBookingAPI;
 using CoworkingSpaceBookingAPI.Infrastructure.Data;
+using CoworkingSpaceBookingAPI.MappingProfile;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
 // Configure the database connection
 var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

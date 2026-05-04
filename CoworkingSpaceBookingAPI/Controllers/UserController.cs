@@ -1,4 +1,5 @@
-﻿using CoworkingSpaceBookingAPI.Domain.Entities;
+﻿using CoworkingSpaceBookingAPI.Domain.DTOs;
+using CoworkingSpaceBookingAPI.Domain.Entities;
 using CoworkingSpaceBookingAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
 
         // GET: api/<UserController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAll()
         {
             var users = await _userService.GetAllAsync();
 
@@ -28,7 +29,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetById(int id)
+        public async Task<ActionResult<UserReadDto>> GetById(int id)
         {
             var user = await _userService.GetByIdAsync(id);
 
@@ -37,7 +38,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public async Task<ActionResult<User>> Create(User user)
+        public async Task<ActionResult<UserReadDto>> Create(UserCreateDto user)
         {
             var createdUser = await _userService.AddAsync(user);
 
@@ -46,7 +47,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, User user)
+        public async Task<IActionResult> Update(int id, UserCreateDto user)
         {
             await _userService.UpdateAsync(id, user);
 

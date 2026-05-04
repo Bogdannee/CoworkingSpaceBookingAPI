@@ -16,8 +16,10 @@ namespace CoworkingSpaceBookingAPI.Repositories
 
         public async Task<User> AddAsync(User entity)
         {
-            dbSet.Add(entity);
+            await dbSet.AddAsync(entity);
             await applicationDbContext.SaveChangesAsync();
+
+            await applicationDbContext.Entry(entity).Reference(u => u.Role).LoadAsync();
 
             return entity;
         }
@@ -32,12 +34,16 @@ namespace CoworkingSpaceBookingAPI.Repositories
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await dbSet.ToListAsync();
+            return await dbSet
+            .Include(u => u.Role)
+            .ToListAsync();
         }
 
         public async Task<User?> GetByIdAsync(int id)
         {
-            return await dbSet.FindAsync(id);
+            return await dbSet
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task UpdateAsync(int id, User entity)

@@ -1,13 +1,14 @@
-﻿using CoworkingSpaceBookingAPI.Domain.Entities;
+﻿using CoworkingSpaceBookingAPI.Domain.DTOs;
+using CoworkingSpaceBookingAPI.Domain.Entities;
 
 namespace CoworkingSpaceBookingAPI.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<User?> GetByIdAsync(int id);
-        Task<IEnumerable<User>> GetAllAsync();
-        Task<User> AddAsync(User entity);
-        Task UpdateAsync(int id, User entity);
+        Task<UserReadDto?> GetByIdAsync(int id);
+        Task<IEnumerable<UserReadDto>> GetAllAsync();
+        Task<UserReadDto> AddAsync(UserCreateDto entity);
+        Task UpdateAsync(int id, UserCreateDto entity);
         Task DeleteAsync(int id);
     }
 }
