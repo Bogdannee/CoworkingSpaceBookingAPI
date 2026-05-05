@@ -1,6 +1,7 @@
 using CoworkingSpaceBookingAPI;
 using CoworkingSpaceBookingAPI.Infrastructure.Data;
 using CoworkingSpaceBookingAPI.MappingProfile;
+using CoworkingSpaceBookingAPI.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -70,5 +71,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.Run();
