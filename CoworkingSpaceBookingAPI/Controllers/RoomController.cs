@@ -1,5 +1,6 @@
 ﻿using CoworkingSpaceBookingAPI.Domain.Entities;
 using CoworkingSpaceBookingAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,7 +18,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
             _roomService = roomService;
         }
 
-        // GET: api/<UserController>
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Room>>> GetAll()
         {
@@ -26,7 +27,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return rooms.ToList();
         }
 
-        // GET api/<UserController>/5
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Room>> GetById(int id)
         {
@@ -35,7 +36,6 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return room;
         }
 
-        // POST api/<UserController>
         [HttpPost]
         public async Task<ActionResult<Room>> Create(Room room)
         {
@@ -44,7 +44,6 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return createdRoom;
         }
 
-        // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Room room)
         {
@@ -53,7 +52,6 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return NoContent();
         }
 
-        // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

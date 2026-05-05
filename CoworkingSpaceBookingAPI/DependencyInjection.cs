@@ -3,6 +3,9 @@ using CoworkingSpaceBookingAPI.Repositories;
 using CoworkingSpaceBookingAPI.Repositories.Interfaces;
 using CoworkingSpaceBookingAPI.Services;
 using CoworkingSpaceBookingAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CoworkingSpaceBookingAPI
 {

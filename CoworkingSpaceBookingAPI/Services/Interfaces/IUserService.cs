@@ -10,5 +10,6 @@ namespace CoworkingSpaceBookingAPI.Services.Interfaces
         Task<UserReadDto> AddAsync(UserCreateDto entity);
         Task UpdateAsync(int id, UserCreateDto entity);
         Task DeleteAsync(int id);
+        Task<AuthResponseDto?> LoginAsync(LoginDto loginDto);
     }
 }

@@ -1,4 +1,5 @@
-﻿using CoworkingSpaceBookingAPI.Domain.Entities;
+﻿using CoworkingSpaceBookingAPI.Domain.DTOs;
+using CoworkingSpaceBookingAPI.Domain.Entities;
 
 namespace CoworkingSpaceBookingAPI.Repositories.Interfaces
 {
@@ -9,5 +10,6 @@ namespace CoworkingSpaceBookingAPI.Repositories.Interfaces
         Task<User> AddAsync(User entity);
         Task UpdateAsync(int id, User entity);
         Task DeleteAsync(int id);
+        Task<User?> GetByEmailAsync(string email);
     }
 }

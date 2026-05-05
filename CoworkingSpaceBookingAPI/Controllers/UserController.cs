@@ -18,7 +18,6 @@ namespace CoworkingSpaceBookingAPI.Controllers
             _userService = userService;
         }
 
-        // GET: api/<UserController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAll()
         {
@@ -27,7 +26,6 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return users.ToList();
         }
 
-        // GET api/<UserController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserReadDto>> GetById(int id)
         {
@@ -36,7 +34,6 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return user;
         }
 
-        // POST api/<UserController>
         [HttpPost]
         public async Task<ActionResult<UserReadDto>> Create(UserCreateDto user)
         {
@@ -45,7 +42,6 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return createdUser;
         }
 
-        // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UserCreateDto user)
         {
@@ -54,13 +50,20 @@ namespace CoworkingSpaceBookingAPI.Controllers
             return NoContent();
         }
 
-        // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _userService.DeleteAsync(id);
 
             return NoContent();
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
+        {
+            var user = await _userService.LoginAsync(loginDto);
+
+            return user;
         }
     }
 }

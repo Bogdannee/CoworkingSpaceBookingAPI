@@ -39,6 +39,13 @@ namespace CoworkingSpaceBookingAPI.Repositories
             .ToListAsync();
         }
 
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await dbSet
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<User?> GetByIdAsync(int id)
         {
             return await dbSet
