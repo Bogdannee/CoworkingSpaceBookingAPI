@@ -1,4 +1,7 @@
-﻿using CoworkingSpaceBookingAPI.Domain.Entities;
+﻿using AutoMapper;
+using CoworkingSpaceBookingAPI.Domain.DTOs;
+using CoworkingSpaceBookingAPI.Domain.Entities;
+using CoworkingSpaceBookingAPI.Repositories;
 using CoworkingSpaceBookingAPI.Repositories.Interfaces;
 using CoworkingSpaceBookingAPI.Services.Interfaces;
 
@@ -7,17 +10,21 @@ namespace CoworkingSpaceBookingAPI.Services
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _bookingRepository;
+        private readonly IMapper _mapper;
 
-        public BookingService(IBookingRepository bookingRepository)
+        public BookingService(IBookingRepository bookingRepository, IMapper mapper)
         {
             _bookingRepository = bookingRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Booking> AddAsync(Booking entity)
+        public async Task<BookingDto> AddAsync(BookingDto bookingDto)
         {
-            var returnedEntity = await _bookingRepository.AddAsync(entity);
+            var bookingEntity = _mapper.Map<Booking>(bookingDto);
 
-            return returnedEntity;
+            var createdEntity = await _bookingRepository.AddAsync(bookingEntity);
+
+            return _mapper.Map<BookingDto>(createdEntity);
         }
 
         public async Task DeleteAsync(int id)
@@ -25,19 +32,33 @@ namespace CoworkingSpaceBookingAPI.Services
             await _bookingRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<Booking>> GetAllAsync()
+        public async Task<IEnumerable<BookingDto>> GetAllAsync()
         {
-            return await _bookingRepository.GetAllAsync();
+            var returnedEntities = await _bookingRepository.GetAllAsync();
+            var bookingDtoList = _mapper.Map<List<BookingDto>>(returnedEntities);
+
+            return bookingDtoList;
         }
 
-        public async Task<Booking?> GetByIdAsync(int id)
+        public async Task<BookingDto?> GetByIdAsync(int id)
         {
-            return await _bookingRepository.GetByIdAsync(id);
+            var returnedEntity = await _bookingRepository.GetByIdAsync(id);
+
+            if (returnedEntity == null)
+            {
+                throw new KeyNotFoundException($"Booking c id={id} не найден.");
+            }
+
+            var bookingDto = _mapper.Map<BookingDto>(returnedEntity);
+
+            return bookingDto;
         }
 
-        public async Task UpdateAsync(int id, Booking entity)
+        public async Task UpdateAsync(int id, BookingDto bookingDto)
         {
-            await _bookingRepository.UpdateAsync(id, entity);
+            var bookingEntity = _mapper.Map<Booking>(bookingDto);
+
+            await _bookingRepository.UpdateAsync(id, bookingEntity);
         }
     }
 }

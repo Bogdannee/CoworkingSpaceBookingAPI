@@ -1,0 +1,12 @@
+﻿
+namespace CoworkingSpaceBookingAPI.Domain.DTOs
+{
+    public class BookingDto
+    {
+        public int Id { get; set; }
+        public required int UserId { get; set; }
+        public required int WorkspaceId { get; set; }
+        public required DateTime ReservationStartTime { get; set; }
+        public required int ReservationDurationMinutes { get; set; }
+    }
+}

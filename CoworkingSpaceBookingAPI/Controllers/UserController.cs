@@ -21,6 +21,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAll()
         {
@@ -30,6 +31,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserReadDto>> GetById(int id)

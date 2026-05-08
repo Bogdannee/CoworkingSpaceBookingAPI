@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRepositories();
 builder.Services.AddServices();
 builder.Services.AddControllers();
+
+// JwtBearer
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -28,9 +31,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 //builder.Services.AddOpenApi();
 
+// Swagger
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -40,7 +44,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Введите JWT токен (без слова Bearer)"
+        Description = "Введите JWT токен"
     });
 
     options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
@@ -48,14 +52,25 @@ builder.Services.AddSwaggerGen(options =>
         [new OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
     });
 });
+
+// AutoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
+
 // Configure the database connection
 var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddEndpointsApiExplorer();
+// Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .Enrich.FromLogContext()
+    .CreateLogger();
 
+builder.Host.UseSerilog();
+
+builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

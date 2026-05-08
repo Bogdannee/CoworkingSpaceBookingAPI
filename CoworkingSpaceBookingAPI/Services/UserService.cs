@@ -61,6 +61,12 @@ namespace CoworkingSpaceBookingAPI.Services
         public async Task<UserReadDto?> GetByIdAsync(int id)
         {
             var returnedEntity = await _userRepository.GetByIdAsync(id);
+
+            if (returnedEntity == null)
+            {
+                throw new KeyNotFoundException($"User c id={id} не найден.");
+            }
+
             var userReadDto = _mapper.Map<UserReadDto>(returnedEntity);
 
             return userReadDto;
@@ -77,7 +83,7 @@ namespace CoworkingSpaceBookingAPI.Services
         public async Task<AuthResponseDto?> LoginAsync(LoginDto loginDto)
         {
             var user = await _userRepository.GetByEmailAsync(loginDto.Email);
-            if (user == null) return null;
+            if (user == null) throw new KeyNotFoundException($"User c Email={loginDto.Email} не найден.");
 
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
                 return null;

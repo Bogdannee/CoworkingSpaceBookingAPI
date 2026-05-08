@@ -1,5 +1,7 @@
-﻿using CoworkingSpaceBookingAPI.Domain.Entities;
+﻿using CoworkingSpaceBookingAPI.Domain.DTOs;
+using CoworkingSpaceBookingAPI.Domain.Entities;
 using CoworkingSpaceBookingAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,44 +19,51 @@ namespace CoworkingSpaceBookingAPI.Controllers
             _workspaceService = userService;
         }
 
-        // GET: api/<UserController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Workspace>>> GetAll()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<WorkspaceDto>>> GetAll()
         {
             var workspaces = await _workspaceService.GetAllAsync();
 
-            return workspaces.ToList();
+            return Ok(workspaces);
         }
 
-        // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Workspace>> GetById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<WorkspaceDto>> GetById(int id)
         {
-            var workspace = await _workspaceService.GetByIdAsync(id);
+            var workspaceDto = await _workspaceService.GetByIdAsync(id);
 
-            return workspace;
+            return Ok(workspaceDto);
         }
 
-        // POST api/<UserController>
         [HttpPost]
-        public async Task<ActionResult<Workspace>> Create(Workspace workspace)
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<WorkspaceDto>> Create(WorkspaceDto workspaceDto)
         {
-            var createdworkspace = await _workspaceService.AddAsync(workspace);
+            var createdWorkspace = await _workspaceService.AddAsync(workspaceDto);
 
-            return createdworkspace;
+            return createdWorkspace;
         }
 
-        // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Workspace workspace)
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(int id, WorkspaceDto workspaceDto)
         {
-            await _workspaceService.UpdateAsync(id, workspace);
+            await _workspaceService.UpdateAsync(id, workspaceDto);
 
             return NoContent();
         }
 
-        // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
             await _workspaceService.DeleteAsync(id);

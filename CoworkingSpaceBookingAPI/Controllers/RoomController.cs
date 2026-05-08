@@ -1,4 +1,5 @@
-﻿using CoworkingSpaceBookingAPI.Domain.Entities;
+﻿using CoworkingSpaceBookingAPI.Domain.DTOs;
+using CoworkingSpaceBookingAPI.Domain.Entities;
 using CoworkingSpaceBookingAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,41 +19,51 @@ namespace CoworkingSpaceBookingAPI.Controllers
             _roomService = roomService;
         }
 
-        [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetAll()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<RoomDto>>> GetAll()
         {
             var rooms = await _roomService.GetAllAsync();
 
-            return rooms.ToList();
+            return Ok(rooms);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Room>> GetById(int id)
         {
             var room = await _roomService.GetByIdAsync(id);
 
-            return room;
+            return Ok(room);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Room>> Create(Room room)
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<RoomDto>> Create(RoomDto roomDto)
         {
-            var createdRoom = await _roomService.AddAsync(room);
+            var createdRoom = await _roomService.AddAsync(roomDto);
 
             return createdRoom;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Room room)
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(int id, RoomDto roomDto)
         {
-            await _roomService.UpdateAsync(id, room);
+            await _roomService.UpdateAsync(id, roomDto);
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
             await _roomService.DeleteAsync(id);

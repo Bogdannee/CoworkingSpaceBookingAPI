@@ -1,4 +1,7 @@
-﻿using CoworkingSpaceBookingAPI.Domain.Entities;
+﻿using AutoMapper;
+using CoworkingSpaceBookingAPI.Domain.DTOs;
+using CoworkingSpaceBookingAPI.Domain.Entities;
+using CoworkingSpaceBookingAPI.Repositories;
 using CoworkingSpaceBookingAPI.Repositories.Interfaces;
 using CoworkingSpaceBookingAPI.Services.Interfaces;
 
@@ -7,17 +10,21 @@ namespace CoworkingSpaceBookingAPI.Services
     public class WorkspaceTypeService : IWorkspaceTypeService
     {
         private readonly IWorkspaceTypeRepository _workspaceTypeRepository;
+        private readonly IMapper _mapper;
 
-        public WorkspaceTypeService(IWorkspaceTypeRepository workspaceTypeRepository)
+        public WorkspaceTypeService(IWorkspaceTypeRepository workspaceTypeRepository, IMapper mapper)
         {
             _workspaceTypeRepository = workspaceTypeRepository;
+            _mapper = mapper;
         }
 
-        public async Task<WorkspaceType> AddAsync(WorkspaceType entity)
+        public async Task<WorkspaceTypeDto> AddAsync(WorkspaceTypeDto workspaceTypeDto)
         {
-            var returnedEntity = await _workspaceTypeRepository.AddAsync(entity);
+            var workspaceTypeEntity = _mapper.Map<WorkspaceType>(workspaceTypeDto);
 
-            return returnedEntity;
+            var createdEntity = await _workspaceTypeRepository.AddAsync(workspaceTypeEntity);
+
+            return _mapper.Map<WorkspaceTypeDto>(createdEntity);
         }
 
         public async Task DeleteAsync(int id)
@@ -25,19 +32,33 @@ namespace CoworkingSpaceBookingAPI.Services
             await _workspaceTypeRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<WorkspaceType>> GetAllAsync()
+        public async Task<IEnumerable<WorkspaceTypeDto>> GetAllAsync()
         {
-            return await _workspaceTypeRepository.GetAllAsync();
+            var returnedEntities = await _workspaceTypeRepository.GetAllAsync();
+            var workspaceTypeDtoList = _mapper.Map<List<WorkspaceTypeDto>>(returnedEntities);
+
+            return workspaceTypeDtoList;
         }
 
-        public async Task<WorkspaceType?> GetByIdAsync(int id)
+        public async Task<WorkspaceTypeDto?> GetByIdAsync(int id)
         {
-            return await _workspaceTypeRepository.GetByIdAsync(id);
+            var returnedEntity = await _workspaceTypeRepository.GetByIdAsync(id);
+
+            if (returnedEntity == null)
+            {
+                throw new KeyNotFoundException($"WorkspaceType c id={id} не найден.");
+            }
+
+            var workspaceTypeDto = _mapper.Map<WorkspaceTypeDto>(returnedEntity);
+
+            return workspaceTypeDto;
         }
 
-        public async Task UpdateAsync(int id, WorkspaceType entity)
+        public async Task UpdateAsync(int id, WorkspaceTypeDto workspaceTypeDto)
         {
-            await _workspaceTypeRepository.UpdateAsync(id, entity);
+            var workspaceType = _mapper.Map<WorkspaceType>(workspaceTypeDto);
+
+            await _workspaceTypeRepository.UpdateAsync(id, workspaceType);
         }
     }
 }

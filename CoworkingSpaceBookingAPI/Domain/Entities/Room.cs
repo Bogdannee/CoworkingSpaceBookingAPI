@@ -8,7 +8,7 @@ namespace CoworkingSpaceBookingAPI.Domain.Entities
         [Key]
         public int Id { get; set; }
         public required string Name { get; set; }
-        public int Floor { get; set; }
+        public required int Floor { get; set; }
 
         public List<Workspace> Workspaces { get; set; } = new();
     }

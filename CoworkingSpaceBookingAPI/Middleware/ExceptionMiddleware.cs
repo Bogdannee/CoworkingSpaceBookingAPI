@@ -23,6 +23,15 @@ namespace CoworkingSpaceBookingAPI.Middleware
             }
             catch (Exception ex)
             {
+                var userId = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "Anonymous";
+
+                _logger.LogError(ex,
+                    "Ошибка {ErrorType} при запросе {Method} {Path}. Пользователь: {UserId}",
+                    ex.GetType().Name,
+                    context.Request.Method,
+                    context.Request.Path,
+                    userId);
+
                 _logger.LogError(ex, "Произошла непредвиденная ошибка");
                 await HandleExceptionAsync(context, ex);
             }

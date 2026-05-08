@@ -7,12 +7,12 @@ namespace CoworkingSpaceBookingAPI.Domain.Entities
     {
         [Key]
         public int Id { get; set; }
-        public bool HasSocket { get; set; }
-        public int Price { get; set; }
+        public required bool HasSocket { get; set; }
+        public required int Price { get; set; }
         [ForeignKey("RoomId")]
-        public int RoomId { get; set; }
+        public required int RoomId { get; set; }
         [ForeignKey("WorkspaceTypeId")]
-        public int WorkspaceTypeId { get; set; }
+        public required int WorkspaceTypeId { get; set; }
         public WorkspaceType? WorkspaceType { get; set; }
         public Room? Room { get; set; }
     }

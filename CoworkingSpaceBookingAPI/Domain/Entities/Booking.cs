@@ -9,11 +9,11 @@ namespace CoworkingSpaceBookingAPI.Domain.Entities
         [Key]
         public int Id { get; set; }
         [ForeignKey("UserId")]
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
         [ForeignKey("WorkspaceId")]
-        public int WorkspaceId { get; set; }
-        public DateTime ReservationStartTime { get; set; }
-        public int ReservationDurationMinutes { get; set; }
+        public required int WorkspaceId { get; set; }
+        public required DateTime ReservationStartTime { get; set; }
+        public required int ReservationDurationMinutes { get; set; }
 
         public User? User { get; set; }
         public Workspace? Workspace { get; set; }
