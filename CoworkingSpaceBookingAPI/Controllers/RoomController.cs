@@ -1,6 +1,5 @@
-﻿using CoworkingSpaceBookingAPI.Domain.DTOs;
-using CoworkingSpaceBookingAPI.Domain.Entities;
-using CoworkingSpaceBookingAPI.Services.Interfaces;
+﻿using Coworking.Application.DTOs;
+using Coworking.Application.Interfaces.ServiceInterfeces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +30,7 @@ namespace CoworkingSpaceBookingAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Room>> GetById(int id)
+        public async Task<ActionResult<RoomDto>> GetById(int id)
         {
             var room = await _roomService.GetByIdAsync(id);
 

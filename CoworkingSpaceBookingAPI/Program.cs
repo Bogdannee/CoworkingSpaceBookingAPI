@@ -1,9 +1,10 @@
 using CoworkingSpaceBookingAPI;
-using CoworkingSpaceBookingAPI.Infrastructure.Data;
 using CoworkingSpaceBookingAPI.MappingProfile;
 using CoworkingSpaceBookingAPI.Middleware;
+using Coworking.Infrastructure.Data;
+using Coworking.Application;
+using Coworking.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Serilog;
@@ -14,9 +15,11 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRepositories();
-builder.Services.AddServices();
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
+builder.Services.AddAuthorization();
 
 // JwtBearer
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -55,14 +58,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// AutoMapper
-builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
-
-// Configure the database connection
-var connectionString = builder.Configuration.GetConnectionString("Default");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
-
 // Serilog & Seq
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -81,6 +76,8 @@ builder.Host.UseSerilog();
 builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -94,7 +91,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseMiddleware<ExceptionMiddleware>();
 
 app.Run();

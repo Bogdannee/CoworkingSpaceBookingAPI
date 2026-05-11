@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="Coworking.Application/Coworking.Application.csproj" Id="743c0c62-ce21-40a4-89f2-2b826802c86e" />
+  <Project Path="Coworking.Domain/Coworking.Domain.csproj" Id="729a7745-6dc4-4ac6-bd4e-8ea415f7020a" />
+  <Project Path="Coworking.Infrastructure/Coworking.Infrastructure.csproj" Id="ae082bfe-3c7d-4d9b-b765-47ae06296e59" />
   <Project Path="CoworkingSpaceBookingAPI/CoworkingSpaceBookingAPI.csproj" />
 </Solution>

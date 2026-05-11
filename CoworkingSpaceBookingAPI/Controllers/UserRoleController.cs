@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using CoworkingSpaceBookingAPI.Domain.DTOs;
-using CoworkingSpaceBookingAPI.Domain.Entities;
-using CoworkingSpaceBookingAPI.Services.Interfaces;
+﻿using Coworking.Application.DTOs;
+using Coworking.Application.Interfaces.ServiceInterfeces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

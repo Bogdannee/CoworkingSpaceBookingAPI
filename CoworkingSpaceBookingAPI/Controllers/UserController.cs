@@ -1,8 +1,6 @@
-﻿using CoworkingSpaceBookingAPI.Domain.DTOs;
-using CoworkingSpaceBookingAPI.Domain.Entities;
-using CoworkingSpaceBookingAPI.Services.Interfaces;
+﻿using Coworking.Application.DTOs;
+using Coworking.Application.Interfaces.ServiceInterfeces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
