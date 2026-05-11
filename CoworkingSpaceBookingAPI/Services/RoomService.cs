@@ -11,11 +11,13 @@ namespace CoworkingSpaceBookingAPI.Services
     {
         private readonly IRoomRepository _roomRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<RoomService> _logger;
 
-        public RoomService(IRoomRepository roomRepository, IMapper mapper)
+        public RoomService(IRoomRepository roomRepository, IMapper mapper, ILogger<RoomService> logger)
         {
             _roomRepository = roomRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<RoomDto> AddAsync(RoomDto roomDto)
@@ -24,11 +26,15 @@ namespace CoworkingSpaceBookingAPI.Services
 
             var createdEntity = await _roomRepository.AddAsync(roomEntity);
 
+            _logger.LogInformation("Создан новый Room Name: {Name}, ID: {Id}", createdEntity.Name, createdEntity.Id);
+
             return _mapper.Map<RoomDto>(createdEntity);
         }
 
         public async Task DeleteAsync(int id)
         {
+            _logger.LogInformation("Удаление Room с ID: {Id}", id);
+
             await _roomRepository.DeleteAsync(id);
         }
 
@@ -57,6 +63,7 @@ namespace CoworkingSpaceBookingAPI.Services
         public async Task UpdateAsync(int id, RoomDto roomDto)
         {
             var roomEntity = _mapper.Map<Room>(roomDto);
+            _logger.LogInformation("Обновление данных Room ID: {Id}", id);
 
             await _roomRepository.UpdateAsync(id, roomEntity);
         }

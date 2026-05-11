@@ -26,13 +26,12 @@ namespace CoworkingSpaceBookingAPI.Middleware
                 var userId = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "Anonymous";
 
                 _logger.LogError(ex,
-                    "Ошибка {ErrorType} при запросе {Method} {Path}. Пользователь: {UserId}",
+                    "Критическая ошибка {ErrorType} на пути {Path}. Пользователь: {UserId}. Сообщение: {Message}",
                     ex.GetType().Name,
-                    context.Request.Method,
                     context.Request.Path,
-                    userId);
+                    userId,
+                    ex.Message);
 
-                _logger.LogError(ex, "Произошла непредвиденная ошибка");
                 await HandleExceptionAsync(context, ex);
             }
         }

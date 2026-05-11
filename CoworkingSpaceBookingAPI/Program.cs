@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using System.Text;
 using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Json;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,11 +63,17 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// Serilog
+// Serilog & Seq
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .MinimumLevel.Information()
     .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+
+    .WriteTo.Seq("http://localhost:5341")
+
+    .WriteTo.File(new JsonFormatter(), "logs/important-events-.json",
+        rollingInterval: RollingInterval.Day,
+        restrictedToMinimumLevel: LogEventLevel.Warning)
     .CreateLogger();
 
 builder.Host.UseSerilog();

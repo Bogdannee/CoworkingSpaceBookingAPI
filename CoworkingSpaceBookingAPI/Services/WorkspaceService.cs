@@ -11,24 +11,30 @@ namespace CoworkingSpaceBookingAPI.Services
     {
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<WorkspaceService> _logger;
 
-        public WorkspaceService(IWorkspaceRepository workspaceRepository, IMapper mapper)
+        public WorkspaceService(IWorkspaceRepository workspaceRepository, IMapper mapper, ILogger<WorkspaceService> logger)
         {
             _workspaceRepository = workspaceRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<WorkspaceDto> AddAsync(WorkspaceDto workspaceDto)
         {
             var workspaceEntity = _mapper.Map<Workspace>(workspaceDto);
 
-            var returnedEntity = await _workspaceRepository.AddAsync(workspaceEntity);
+            var createdEntity = await _workspaceRepository.AddAsync(workspaceEntity);
 
-            return _mapper.Map<WorkspaceDto>(returnedEntity);
+            _logger.LogInformation("Создан новый Workspace RoomId: {RoomId}, ID: {Id}", createdEntity.RoomId, createdEntity.Id);
+
+            return _mapper.Map<WorkspaceDto>(createdEntity);
         }
 
         public async Task DeleteAsync(int id)
         {
+            _logger.LogInformation("Удаление Workspace с ID: {Id}", id);
+
             await _workspaceRepository.DeleteAsync(id);
         }
 
@@ -57,6 +63,7 @@ namespace CoworkingSpaceBookingAPI.Services
         public async Task UpdateAsync(int id, WorkspaceDto workspaceDto)
         {
             var workspaceEntity = _mapper.Map<Workspace>(workspaceDto);
+            _logger.LogInformation("Обновление данных Workspace ID: {Id}", id);
 
             await _workspaceRepository.UpdateAsync(id, workspaceEntity);
         }

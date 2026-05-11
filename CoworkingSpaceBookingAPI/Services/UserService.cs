@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using BCrypt.Net;
 using CoworkingSpaceBookingAPI.Domain.DTOs;
 using CoworkingSpaceBookingAPI.Domain.Entities;
 using CoworkingSpaceBookingAPI.Repositories.Interfaces;
 using CoworkingSpaceBookingAPI.Services.Interfaces;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic.FileIO;
-using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime;
 using System.Security.Claims;
 using System.Text;
 
@@ -20,12 +15,14 @@ namespace CoworkingSpaceBookingAPI.Services
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository userRepository, IMapper mapper, IConfiguration config)
+        public UserService(IUserRepository userRepository, IMapper mapper, IConfiguration config, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _config = config;
+            _logger = logger;
         }
 
         public async Task<UserReadDto> AddAsync(UserCreateDto userDto)
@@ -34,7 +31,8 @@ namespace CoworkingSpaceBookingAPI.Services
 
             if (existUser != null)
             {
-                return null;
+                _logger.LogWarning("Попытка регистрации на уже существующий Email: {Email}", userDto.Email);
+                throw new InvalidOperationException($"Пользователь с Email {userDto.Email} уже зарегистрирован.");
             }
 
             var userEntity = _mapper.Map<User>(userDto);
@@ -42,11 +40,14 @@ namespace CoworkingSpaceBookingAPI.Services
 
             var createdUser = await _userRepository.AddAsync(userEntity);
 
+            _logger.LogInformation("Создан новый пользователь: {Email}, ID: {UserId}", createdUser.Email, createdUser.Id);
+
             return _mapper.Map<UserReadDto>(createdUser);
         }
 
         public async Task DeleteAsync(int id)
         {
+            _logger.LogInformation("Удаление пользователя с ID: {UserId}", id);
             await _userRepository.DeleteAsync(id);
         }
 
@@ -77,17 +78,28 @@ namespace CoworkingSpaceBookingAPI.Services
             var user = _mapper.Map<User>(userCreateDto);
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userCreateDto.Password);
 
+            _logger.LogInformation("Обновление данных пользователя ID: {UserId}", id);
+
             await _userRepository.UpdateAsync(id, user);
         }
 
         public async Task<AuthResponseDto?> LoginAsync(LoginDto loginDto)
         {
             var user = await _userRepository.GetByEmailAsync(loginDto.Email);
-            if (user == null) throw new KeyNotFoundException($"User c Email={loginDto.Email} не найден.");
+            if (user == null)
+            {
+                _logger.LogWarning("Неудачная попытка входа: пользователь с Email {Email} не найден.", loginDto.Email);
+                throw new KeyNotFoundException($"User c Email={loginDto.Email} не найден.");
+
+            }
 
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+            {
+                _logger.LogWarning("Неверный пароль для пользователя: {Email}", loginDto.Email);
                 return null;
+            }
 
+            _logger.LogInformation("Пользователь {Email} (ID: {UserId}) успешно вошел в систему.", user.Email, user.Id);
             var token = GenerateJwtToken(user);
 
             return new AuthResponseDto
