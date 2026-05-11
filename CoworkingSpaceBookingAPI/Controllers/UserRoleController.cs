@@ -1,5 +1,6 @@
-﻿using CoworkingSpaceBookingAPI.Domain.Entities;
-using CoworkingSpaceBookingAPI.Services.Interfaces;
+﻿using Coworking.Application.DTOs;
+using Coworking.Application.Interfaces.ServiceInterfeces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,51 +11,60 @@ namespace CoworkingSpaceBookingAPI.Controllers
     [ApiController]
     public class UserRoleController : ControllerBase
     {
-        readonly IUserRoleService _userRoleService;
+        private readonly IUserRoleService _userRoleService;
 
         public UserRoleController(IUserRoleService userRoleService)
         {
             _userRoleService = userRoleService;
         }
 
-        // GET: api/<UserRoleController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserRole>>> GetAll()
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<UserRoleDto>>> GetAll()
         {
             var users = await _userRoleService.GetAllAsync();
 
-            return users.ToList();
+            return Ok(users);
         }
 
-        // GET api/<UserRoleController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserRole>> GetById(int id)
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserRoleDto>> GetById(int id)
         {
             var user = await _userRoleService.GetByIdAsync(id);
 
-            return user;
+            return Ok(user);
         }
 
-        // POST api/<UserRoleController>
         [HttpPost]
-        public async Task<ActionResult<UserRole>> Create(UserRole userRole)
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserRoleDto>> Create(UserRoleDto userRoleDto)
         {
-            var createdUser = await _userRoleService.AddAsync(userRole);
+            var createdUser = await _userRoleService.AddAsync(userRoleDto);
 
             return createdUser;
         }
 
-        // PUT api/<UserRoleController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UserRole userRole)
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(int id, UserRoleDto userRoleDto)
         {
-            await _userRoleService.UpdateAsync(id, userRole);
+            await _userRoleService.UpdateAsync(id, userRoleDto);
 
             return NoContent();
         }
 
-        // DELETE api/<UserRoleController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
             await _userRoleService.DeleteAsync(id);
