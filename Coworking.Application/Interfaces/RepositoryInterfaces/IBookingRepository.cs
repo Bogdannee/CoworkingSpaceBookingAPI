@@ -9,5 +9,6 @@ namespace Coworking.Application.Interfaces.RepositoryInterfaces
         Task<Booking> AddAsync(Booking entity);
         Task UpdateAsync(int id, Booking entity);
         Task DeleteAsync(int id);
+        Task<bool> HasOverlapAsync(int workspaceId, DateTime start, int durationMinutes);
     }
 }

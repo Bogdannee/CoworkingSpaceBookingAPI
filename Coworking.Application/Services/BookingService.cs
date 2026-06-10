@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Coworking.Application.DTOs;
-using Coworking.Application.Interfaces.ServiceInterfeces;
 using Coworking.Application.Interfaces.RepositoryInterfaces;
-using Microsoft.Extensions.Logging;
+using Coworking.Application.Interfaces.ServiceInterfeces;
 using Coworking.Domain.Entities;
+using Coworking.Domain.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace Coworking.Application.Services
 {
@@ -22,11 +23,26 @@ namespace Coworking.Application.Services
 
         public async Task<BookingDto> AddAsync(BookingDto bookingDto)
         {
+            var isOverlap = await _bookingRepository.HasOverlapAsync(
+                bookingDto.WorkspaceId,
+                bookingDto.ReservationStartTime,
+                bookingDto.ReservationDurationMinutes);
+
+            if (isOverlap)
+            {
+                _logger.LogWarning("Попытка бронирования занятого места: Workspace {WorkspaceId}, Time {Time}",
+                    bookingDto.WorkspaceId, bookingDto.ReservationStartTime);
+
+                throw new InvalidOperationException("Это рабочее место уже занято на выбранное время.");
+            }
+
             var bookingEntity = _mapper.Map<Booking>(bookingDto);
+            bookingEntity.Status = BookingStatus.Created;
 
             var createdEntity = await _bookingRepository.AddAsync(bookingEntity);
 
-            _logger.LogInformation("Создан новый Booking UserId: {UserId}, ID: {Id}", createdEntity.UserId, createdEntity.Id);
+            _logger.LogInformation("Создан новый Booking ID: {Id} для пользователя {UserId}",
+                createdEntity.Id, createdEntity.UserId);
 
             return _mapper.Map<BookingDto>(createdEntity);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using Coworking.Domain.Enums;
+using Microsoft.VisualBasic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +15,7 @@ namespace Coworking.Domain.Entities
         public required int WorkspaceId { get; set; }
         public required DateTime ReservationStartTime { get; set; }
         public required int ReservationDurationMinutes { get; set; }
+        public BookingStatus Status { get; set; }
 
         public User? User { get; set; }
         public Workspace? Workspace { get; set; }

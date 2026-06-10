@@ -58,13 +58,15 @@ namespace CoworkingSpaceBookingAPI.MappingProfile
              .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
              .ForMember(dest => dest.WorkspaceId, opt => opt.MapFrom(src => src.WorkspaceId))
              .ForMember(dest => dest.ReservationStartTime, opt => opt.MapFrom(src => src.ReservationStartTime))
-             .ForMember(dest => dest.ReservationDurationMinutes, opt => opt.MapFrom(src => src.ReservationDurationMinutes));
+             .ForMember(dest => dest.ReservationDurationMinutes, opt => opt.MapFrom(src => src.ReservationDurationMinutes))
+             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
             CreateMap<Booking, BookingDto>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.WorkspaceId, opt => opt.MapFrom(src => src.WorkspaceId))
                 .ForMember(dest => dest.ReservationStartTime, opt => opt.MapFrom(src => src.ReservationStartTime))
-                .ForMember(dest => dest.ReservationDurationMinutes, opt => opt.MapFrom(src => src.ReservationDurationMinutes));
+                .ForMember(dest => dest.ReservationDurationMinutes, opt => opt.MapFrom(src => src.ReservationDurationMinutes))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
         }
     }
 }

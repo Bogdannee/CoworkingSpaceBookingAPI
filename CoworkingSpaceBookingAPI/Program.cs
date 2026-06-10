@@ -1,9 +1,6 @@
-using CoworkingSpaceBookingAPI;
-using CoworkingSpaceBookingAPI.MappingProfile;
-using CoworkingSpaceBookingAPI.Middleware;
-using Coworking.Infrastructure.Data;
 using Coworking.Application;
 using Coworking.Infrastructure;
+using CoworkingSpaceBookingAPI.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -11,6 +8,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +18,9 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 // JwtBearer
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
